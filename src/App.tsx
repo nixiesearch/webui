@@ -1,104 +1,40 @@
-import { ErrorComponent, GitHubBanner, Refine } from "@refinedev/core";
-import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
-import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
-
+import { Refine } from "@refinedev/core";
+import { RefineThemes, useNotificationProvider } from "@refinedev/mantine";
+import { NotificationsProvider } from "@mantine/notifications";
 import routerBindings, {
   DocumentTitleHandler,
-  NavigateToResource,
   UnsavedChangesNotifier,
 } from "@refinedev/react-router-v6";
 import dataProvider from "@refinedev/simple-rest";
-import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
-import "./App.css";
-import { Layout } from "./components/layout";
-import {
-  BlogPostCreate,
-  BlogPostEdit,
-  BlogPostList,
-  BlogPostShow,
-} from "./pages/blog-posts";
-import {
-  CategoryCreate,
-  CategoryEdit,
-  CategoryList,
-  CategoryShow,
-} from "./pages/categories";
+import { BrowserRouter } from "react-router-dom";
+import { MantineProvider } from "@mantine/core";
+import { Router } from "./Router";
+import { refineOptions, resources } from "./config";
 
-function App() {
+function NixieUI() {
   return (
     <BrowserRouter>
-      <GitHubBanner />
-      <RefineKbarProvider>
-        <DevtoolsProvider>
+      <MantineProvider
+        theme={RefineThemes.Blue}
+        withNormalizeCSS
+        withGlobalStyles
+      >
+        <NotificationsProvider position="top-right">
           <Refine
+            notificationProvider={useNotificationProvider}
             dataProvider={dataProvider("https://api.fake-rest.refine.dev")}
             routerProvider={routerBindings}
-            resources={[
-              {
-                name: "blog_posts",
-                list: "/blog-posts",
-                create: "/blog-posts/create",
-                edit: "/blog-posts/edit/:id",
-                show: "/blog-posts/show/:id",
-                meta: {
-                  canDelete: true,
-                },
-              },
-              {
-                name: "categories",
-                list: "/categories",
-                create: "/categories/create",
-                edit: "/categories/edit/:id",
-                show: "/categories/show/:id",
-                meta: {
-                  canDelete: true,
-                },
-              },
-            ]}
-            options={{
-              syncWithLocation: true,
-              warnWhenUnsavedChanges: true,
-              useNewQueryKeys: true,
-              projectId: "maxV4A-VJEa1X-r0QzHE",
-            }}
+            resources={resources}
+            options={refineOptions}
           >
-            <Routes>
-              <Route
-                element={
-                  <Layout>
-                    <Outlet />
-                  </Layout>
-                }
-              >
-                <Route
-                  index
-                  element={<NavigateToResource resource="blog_posts" />}
-                />
-                <Route path="/blog-posts">
-                  <Route index element={<BlogPostList />} />
-                  <Route path="create" element={<BlogPostCreate />} />
-                  <Route path="edit/:id" element={<BlogPostEdit />} />
-                  <Route path="show/:id" element={<BlogPostShow />} />
-                </Route>
-                <Route path="/categories">
-                  <Route index element={<CategoryList />} />
-                  <Route path="create" element={<CategoryCreate />} />
-                  <Route path="edit/:id" element={<CategoryEdit />} />
-                  <Route path="show/:id" element={<CategoryShow />} />
-                </Route>
-                <Route path="*" element={<ErrorComponent />} />
-              </Route>
-            </Routes>
-
-            <RefineKbar />
+            <Router />
             <UnsavedChangesNotifier />
             <DocumentTitleHandler />
           </Refine>
-          <DevtoolsPanel />
-        </DevtoolsProvider>
-      </RefineKbarProvider>
+        </NotificationsProvider>
+      </MantineProvider>
     </BrowserRouter>
   );
 }
 
-export default App;
+export default NixieUI;

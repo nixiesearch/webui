@@ -1,6 +1,17 @@
 import { useMany, useNavigation, type GetManyResponse } from "@refinedev/core";
 import { useTable } from "@refinedev/react-table";
 import { flexRender, type ColumnDef } from "@tanstack/react-table";
+import { List, ShowButton, EditButton, DeleteButton } from "@refinedev/mantine";
+
+import {
+  Box,
+  Group,
+  ScrollArea,
+  Select,
+  Table,
+  Pagination,
+} from "@mantine/core";
+
 import React from "react";
 
 export const BlogPostList = () => {
@@ -62,30 +73,12 @@ export const BlogPostList = () => {
         header: "Actions",
         cell: function render({ getValue }) {
           return (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                flexWrap: "wrap",
-                gap: "4px",
-              }}
-            >
-              <button
-                onClick={() => {
-                  show("blog_posts", getValue() as string);
-                }}
-              >
-                Show
-              </button>
-              <button
-                onClick={() => {
-                  edit("blog_posts", getValue() as string);
-                }}
-              >
-                Edit
-              </button>
-            </div>
-          );
+            <Group spacing="xs" noWrap>
+              <ShowButton hideText recordItemId={getValue() as number} />
+              <EditButton hideText recordItemId={getValue() as number} />
+              <DeleteButton hideText recordItemId={getValue() as number} />
+            </Group>
+          )
         },
       },
     ],
@@ -100,15 +93,10 @@ export const BlogPostList = () => {
     setOptions,
     refineCore: {
       tableQueryResult: { data: tableData },
-    },
-    getState,
-    setPageIndex,
-    getCanPreviousPage,
-    getPageCount,
-    getCanNextPage,
-    nextPage,
-    previousPage,
-    setPageSize,
+      setCurrent,
+      pageCount,
+      current,
+    }
   } = useTable({
     columns,
   });
@@ -130,30 +118,20 @@ export const BlogPostList = () => {
     },
   }));
 
+
   return (
-    <div style={{ padding: "16px" }}>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <h1>{"List"}</h1>
-        <button onClick={() => create("blog_posts")}>{"Create"}</button>
-      </div>
-      <div style={{ maxWidth: "100%", overflowY: "scroll" }}>
-        <table>
+    <ScrollArea>
+      <List>
+        <Table highlightOnHover>
           <thead>
             {getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <th key={header.id}>
-                    {!header.isPlaceholder &&
-                      flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
                   </th>
                 ))}
               </tr>
@@ -170,57 +148,15 @@ export const BlogPostList = () => {
               </tr>
             ))}
           </tbody>
-        </table>
-      </div>
-      <div style={{ marginTop: "12px" }}>
-        <button
-          onClick={() => setPageIndex(0)}
-          disabled={!getCanPreviousPage()}
-        >
-          {"<<"}
-        </button>
-        <button onClick={() => previousPage()} disabled={!getCanPreviousPage()}>
-          {"<"}
-        </button>
-        <button onClick={() => nextPage()} disabled={!getCanNextPage()}>
-          {">"}
-        </button>
-        <button
-          onClick={() => setPageIndex(getPageCount() - 1)}
-          disabled={!getCanNextPage()}
-        >
-          {">>"}
-        </button>
-        <span>
-          <strong>
-            {" "}
-            {getState().pagination.pageIndex + 1} / {getPageCount()}{" "}
-          </strong>
-        </span>
-        <span>
-          | {"Go"}:{" "}
-          <input
-            type="number"
-            defaultValue={getState().pagination.pageIndex + 1}
-            onChange={(e) => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0;
-              setPageIndex(page);
-            }}
-          />
-        </span>{" "}
-        <select
-          value={getState().pagination.pageSize}
-          onChange={(e) => {
-            setPageSize(Number(e.target.value));
-          }}
-        >
-          {[10, 20, 30, 40, 50].map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
-              {"Show"} {pageSize}
-            </option>
-          ))}
-        </select>
-      </div>
-    </div>
+        </Table>
+        <br />
+        <Pagination
+          position="right"
+          total={pageCount}
+          page={current}
+          onChange={setCurrent}
+        />
+      </List>
+    </ScrollArea>
   );
 };
