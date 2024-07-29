@@ -1,15 +1,15 @@
-import { Refine } from "@refinedev/core";
+import { Refine, useApiUrl, useCustom } from "@refinedev/core";
 import { RefineThemes, useNotificationProvider } from "@refinedev/mantine";
 import { NotificationsProvider } from "@mantine/notifications";
 import routerBindings, {
   DocumentTitleHandler,
   UnsavedChangesNotifier,
 } from "@refinedev/react-router-v6";
-import dataProvider from "@refinedev/simple-rest";
 import { BrowserRouter } from "react-router-dom";
 import { MantineProvider } from "@mantine/core";
 import { Router } from "./Router";
-import { refineOptions, resources } from "./config";
+import { dataProviders, refineOptions, resources } from "../refine";
+import { ConfigProvider } from "./ConfigProvider";
 
 function NixieUI() {
   return (
@@ -22,12 +22,14 @@ function NixieUI() {
         <NotificationsProvider position="top-right">
           <Refine
             notificationProvider={useNotificationProvider}
-            dataProvider={dataProvider("https://api.fake-rest.refine.dev")}
+            dataProvider={dataProviders}
             routerProvider={routerBindings}
             resources={resources}
             options={refineOptions}
           >
-            <Router />
+            <ConfigProvider>
+              <Router />
+            </ConfigProvider>
             <UnsavedChangesNotifier />
             <DocumentTitleHandler />
           </Refine>
