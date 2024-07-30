@@ -1,16 +1,29 @@
 import { useApiUrl, useCustom } from "@refinedev/core"
 import { useState } from "react";
-import { Badge, Button, Card, Center, Code, Divider, Flex, Grid, Group, Image, Input, Loader, Paper, ScrollArea, Select, SimpleGrid, Space, Text, TextInput } from '@mantine/core';
-import { IconPlus } from "@tabler/icons-react";
+import { Badge, Button, Card, Center, Code, Divider, Flex, Grid, Group, Image, Input, Loader, Paper, ScrollArea, Select, SimpleGrid, Space, Text, TextInput, Tooltip } from '@mantine/core';
+import { IconAlertCircle, IconCircle, IconPlus } from "@tabler/icons-react";
 import { Prism } from "@mantine/prism";
 
 const getInputByType = (field: any, onChange: any) => {
   const { type } = field
   if (type === 'text') return (
-    <TextInput placeholder="Search..." onChange={e => onChange(e.currentTarget.value)} />
+    <TextInput
+      placeholder="Search string..."
+      onChange={e => onChange(e.currentTarget.value)}
+    />
   )
   if (type === 'text[]') return (
-    <TextInput placeholder="Search..." onChange={e => onChange(e.currentTarget.value.split(',').map(s => s.trim()))} />
+    <TextInput
+      placeholder="Multiple strings..."
+      onChange={e => onChange(e.currentTarget.value.split(',').map(s => s.trim()))}
+      rightSection={
+        <Tooltip label="Use coma separator to define multiple strings" position="top-end" withArrow>
+          <div>
+            <IconAlertCircle size={18} style={{ display: 'block', opacity: 0.5 }} />
+          </div>
+        </Tooltip>
+      }
+    />
   )
   return null
 }

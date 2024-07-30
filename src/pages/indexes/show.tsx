@@ -20,7 +20,7 @@ export const IndexesShow = () => {
 
   return (
     <Tabs defaultValue="mapping">
-      <Paper radius="md" shadow="md" p="xs">
+      <Paper radius="md" shadow="md" p="xs" style={{ position: 'sticky', top: 0, zIndex: 1 }}>
         <Tabs.List>
           <Tabs.Tab value="search">
             Search
