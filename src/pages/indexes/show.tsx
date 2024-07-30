@@ -1,11 +1,10 @@
-import { Box, Paper, ScrollArea, Space, Tabs } from "@mantine/core";
-import { useApiUrl, useCustom, useOne, useParsed, useShow } from "@refinedev/core";
+import { Paper, Space, Tabs } from "@mantine/core";
+import { useApiUrl, useOne, useParsed } from "@refinedev/core";
 import { Prism } from '@mantine/prism';
-import 'prism-json-fold'
 import { SearchTab } from "../../components/SearchTab";
+import 'prism-json-fold'
 
 export const IndexesShow = () => {
-  const apiUrl = useApiUrl();
   const { id } = useParsed();
 
   const { data: statsData } = useOne({

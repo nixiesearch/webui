@@ -1,6 +1,6 @@
 import { useApiUrl, useCustom } from "@refinedev/core"
 import { useState } from "react";
-import { Badge, Button, Card, Center, Code, Divider, Flex, Grid, Group, Image, Input, Loader, Paper, ScrollArea, Select, SimpleGrid, Space, Text, TextInput, Tooltip } from '@mantine/core';
+import { Badge, Button, Card, Center, Code, Divider, Flex, Grid, Group, Image, Input, Loader, NumberInput, Paper, ScrollArea, Select, SimpleGrid, Slider, Space, Text, TextInput, Tooltip } from '@mantine/core';
 import { IconAlertCircle, IconCircle, IconPlus } from "@tabler/icons-react";
 import { Prism } from "@mantine/prism";
 
@@ -15,7 +15,7 @@ const getInputByType = (field: any, onChange: any) => {
   if (type === 'text[]') return (
     <TextInput
       placeholder="Multiple strings..."
-      onChange={e => onChange(e.currentTarget.value.split(',').map(s => s.trim()))}
+      onChange={e => onChange(e.currentTarget.value)}
       rightSection={
         <Tooltip label="Use coma separator to define multiple strings" position="top-end" withArrow>
           <div>
@@ -23,6 +23,29 @@ const getInputByType = (field: any, onChange: any) => {
           </div>
         </Tooltip>
       }
+    />
+  )
+  if (type === 'int') return (
+    <NumberInput
+      placeholder="Int value..."
+      type="number"
+      onChange={val => onChange(Number(val))}
+    />
+  )
+  if (type === 'long') return (
+    <NumberInput
+      placeholder="Big int..."
+      type="number"
+      onChange={val => onChange(Number(val))}
+    />
+  )
+  if (type === 'float') return (
+    <NumberInput
+      placeholder="Float number..."
+      type="number"
+      step={0.05}
+      precision={2}
+      onChange={val => onChange(val)}
     />
   )
   return null
@@ -90,7 +113,6 @@ export const SearchTab = ({
     }
   })
 
-  console.log(data)
   return (
     <>
       <Paper radius="md" shadow="md" p="xs">
@@ -98,7 +120,7 @@ export const SearchTab = ({
           <Select
             searchable
             dropdownPosition="bottom"
-            data={Object.keys(fields).map((field) => ({ value: field, label: field }))} 
+            data={Object.keys(fields).filter(f => fields[f].search).map((field) => ({ value: field, label: field }))} 
             placeholder="Select field"
             onChange={(value) => setField(value)}
           />

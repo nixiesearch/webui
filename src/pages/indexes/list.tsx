@@ -70,7 +70,7 @@ export const IndexesList = () => {
               { Object.keys(schema).map((key, i) => (
                 <tr
                   key={key}
-                  onClick={() => go({ to: `indexes/${key}` })}
+                  onClick={() => go({ to: `/indexes/${key}` })}
                   style={{ cursor: "pointer" }}
                 >
                   <td>{schema[key].name}</td>
