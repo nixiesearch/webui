@@ -48,7 +48,7 @@ export const refineOptions: RefineProps['options'] = {
   syncWithLocation: true,
   warnWhenUnsavedChanges: true,
   useNewQueryKeys: true,
-  projectId: "maxV4A-VJEa1X-r0QzHE",
+  disableTelemetry: true
 }
 
 const defaultDataProvider = {
@@ -56,7 +56,6 @@ const defaultDataProvider = {
   getOne: async ({ resource, id, meta }: { resource: string, id: string, meta: any }) => {
     const apiURL = defaultDataProvider.getApiUrl()
     const path = resources.find((r) => r.name === resource)?.show as string
-    console.log(meta)
     const response = await defaultDataProvider.custom({
       url: `${apiURL}${path.replace(":id", id)}`,
       method: "get",

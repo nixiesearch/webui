@@ -1,6 +1,5 @@
 import { ThemedLayoutV2, ThemedSiderV2, ThemedTitleV2 } from "@refinedev/mantine";
 import { Outlet, Route, Routes } from "react-router-dom";
-import { CategoryCreate, CategoryList } from "../pages/categories";
 import { ErrorComponent } from "@refinedev/core";
 import NixieIcon from './icons/Nixie.svg';
 import { Menu } from "./menu";
@@ -35,8 +34,8 @@ export const Router = () => (
         <Route path=":id" element={<IndexesShow />} />
       </Route>
       <Route path="/metrics">
-        <Route index element={<CategoryList />} />
-        <Route path="create" element={<CategoryCreate />} />
+        {/* <Route index element={<CategoryList />} />
+        <Route path="create" element={<CategoryCreate />} /> */}
       </Route>
       <Route path="*" element={<ErrorComponent />} />
     </Route>
