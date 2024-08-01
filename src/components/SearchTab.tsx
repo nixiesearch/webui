@@ -131,6 +131,13 @@ export const SearchTab = ({
       </Paper>
       <Space h="md" />
       {
+        !data && !value &&
+        <Text fz="xl" c="dimmed">
+          Set filters to search by
+        </Text>
+      }
+      {
+        
         isFetching
           ? <Center>
               <Loader size={50} />

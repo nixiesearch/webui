@@ -1,4 +1,4 @@
-import { Paper, Space, Tabs } from "@mantine/core";
+import { Paper, Space, Tabs, Text } from "@mantine/core";
 import { useApiUrl, useOne, useParsed } from "@refinedev/core";
 import { Prism } from '@mantine/prism';
 import { SearchTab } from "../../components/SearchTab";
@@ -18,8 +18,13 @@ export const IndexesShow = () => {
   })
 
   return (
-    <Tabs defaultValue="mapping">
-      <Paper radius="md" shadow="md" p="xs" style={{ position: 'sticky', top: 0, zIndex: 1 }}>
+    <Tabs defaultValue="search">
+      <Paper
+        radius="md"
+        shadow="md"
+        p="xs"
+        style={{ position: 'sticky', top: 0, zIndex: 1 }}
+      >
         <Tabs.List>
           <Tabs.Tab value="search">
             Search
