@@ -5,10 +5,14 @@ import {
   Text,
   Paper,
   Space,
+  ActionIcon,
+  Code,
+  SimpleGrid,
 } from "@mantine/core";
 import { HttpError, useGo, useMany } from "@refinedev/core";
 import { useConfig } from "../../components/ConfigProvider";
 import { Index } from "../../types/Index";
+import { IconEye } from "@tabler/icons-react";
 
 const countDocs = (index: Index) => index.leaves.reduce((acc, leaf) => acc + leaf.numDocs, 0)
 
@@ -26,63 +30,73 @@ export const IndexesList = () => {
 
   return (
   <>
-      <Group style={{ flex: 1 }}>
+      <SimpleGrid cols={{ base: 1, sm: 3}}>
         <Paper radius="md" shadow="md" p="xs">
           <div>
             <Text fz='lg'>
               Node
             </Text>
-            <Text fz='sm'>
+            <Code fz='sm'>
               {searcher.host}:{searcher.port}
-            </Text>
+            </Code>
           </div>
         </Paper>
         <Paper radius="md" shadow="md" p="xs">
           <Text fz='lg'>
             Indexes
           </Text>
-          <Text fz='sm'>
+          <Code fz='sm'>
             {Object.keys(schema).length}
-          </Text>
+          </Code>
         </Paper>
         <Paper radius="md" shadow="md" p="xs">
           <Text fz='lg'>
             Docs
           </Text>
-          <Text fz='sm'>
+          <Code fz='sm'>
             {countsMap.reduce((acc, count) => acc + count, 0)}
-          </Text>
+          </Code>
         </Paper>
-      </Group>
+      </SimpleGrid>
       <Space h="md" />
-      <ScrollArea>
-        <Paper p="md">
-          <Table verticalSpacing="md">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Size</th>
-                <th>Latency</th>
-                <th>Last updated</th>
-              </tr>
-            </thead>
-            <tbody>
+      <Paper p="md">
+        <ScrollArea>
+          <Table
+            verticalSpacing="md"
+            miw={700}
+            highlightOnHover
+            highlightOnHoverColor="gray.1"
+          >
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th>Name</Table.Th>
+                <Table.Th>Size</Table.Th>
+                <Table.Th>Latency</Table.Th>
+                <Table.Th>Last updated</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
               { Object.keys(schema).map((key, i) => (
-                <tr
+                <Table.Tr
                   key={key}
                   onClick={() => go({ to: `/indexes/${key}` })}
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer", borderRadius: 10 }}
                 >
-                  <td>{schema[key].name}</td>
-                  <td>{countsMap[i]}</td>
-                  <td>{schema[key].config.flush.interval}</td>
-                  <td>{schema[key].name}</td>
-                </tr>
+                  <Table.Th>{schema[key].name}</Table.Th>
+                  <Table.Th>{countsMap[i]}</Table.Th>
+                  <Table.Th>{schema[key].config.flush.interval}</Table.Th>
+                  <Table.Th>{schema[key].name}</Table.Th>
+                  <Table.Th align="right">
+                    <ActionIcon aria-label="View index">
+                      <IconEye size={18} />
+                    </ActionIcon>
+                  </Table.Th>
+                </Table.Tr>
               ))}
-            </tbody>
+              </Table.Tbody>
             </Table>
-          </Paper>
-      </ScrollArea>
+          </ScrollArea>
+        </Paper>
     </>
   )
 }

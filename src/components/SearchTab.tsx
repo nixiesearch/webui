@@ -1,8 +1,8 @@
 import { useApiUrl, useCustom } from "@refinedev/core"
 import { useState } from "react";
-import { Badge, Button, Card, Center, Code, Divider, Flex, Grid, Group, Image, Input, Loader, NumberInput, Paper, ScrollArea, Select, SimpleGrid, Slider, Space, Text, TextInput, Tooltip } from '@mantine/core';
+import { ActionIcon, Badge, Button, Card, Center, Code, Divider, Flex, Grid, Group, Image, Input, Loader, NumberInput, Paper, ScrollArea, Select, SimpleGrid, Slider, Space, Text, TextInput, Title, Tooltip } from '@mantine/core';
 import { IconAlertCircle, IconCircle, IconPlus } from "@tabler/icons-react";
-import { Prism } from "@mantine/prism";
+import { CodeHighlight } from '@mantine/code-highlight';
 
 const getInputByType = (field: any, onChange: any) => {
   const { type } = field
@@ -55,28 +55,29 @@ const Items = (item: any) => {
   const { _id, image_url, title, _score, ...rest } = item
   return (
     <Card shadow="sm" p="lg" radius="md" withBorder>
-      <Card.Section>
+      <Card.Section style={{ position: 'relative' }}>
         <Image
           src={image_url}
           height={160}
+          radius="sm"
         />
+        <Badge color="pink" style={{ position: 'absolute', right: 6, top: 6 }}>
+          score: {_score}
+        </Badge>
       </Card.Section>
       <Code fz="sm" mt='md' block>
         {_id}
       </Code>
-      <Group position="apart" mt="md" mb="xs" noWrap>
-        <Text weight={500} truncate>
-          {title}
-        </Text>
-        <Badge color="pink" variant="light">
-          score: {_score}
-        </Badge>
+      <Group mt="md" mb="xs" wrap="nowrap">
+        <Title order={4}>
+          <Text truncate>
+            {title}
+          </Text>
+        </Title>
       </Group>
-      <Group position="apart" mt="md" mb="xs">
+      <Group mt="md" mb="xs">
         <ScrollArea h={300}>
-          <Prism language="json">
-            {JSON.stringify(item, null, 2)}
-          </Prism>
+          <CodeHighlight language="json" code={JSON.stringify(item, null, 2)}/>
         </ScrollArea>
       </Group>
     </Card>
@@ -115,34 +116,43 @@ export const SearchTab = ({
 
   return (
     <>
-      <Paper radius="md" shadow="md" p="xs">
-        <Flex gap="md">
-          <Select
-            searchable
-            dropdownPosition="bottom"
-            data={Object.keys(fields).filter(f => fields[f].search).map((field) => ({ value: field, label: field }))} 
-            placeholder="Select field"
-            onChange={(value) => setField(value)}
-          />
-          {
-            field && getInputByType(fields[field], setValue)
-          }
-        </Flex>
-      </Paper>
-      <Space h="md" />
+      <Group>
+        <Paper radius="md" shadow="md" p="xs">
+          <Flex gap="md">
+            <Select
+              searchable
+              data={Object.keys(fields).filter(f => fields[f].search).map((field) => ({ value: field, label: field }))} 
+              placeholder="Select field"
+              onChange={(value) => setField(value)}
+            />
+            {
+              field && getInputByType(fields[field], setValue)
+            }
+          </Flex>
+        </Paper>
+        <ActionIcon size="xl" disabled aria-label="Add filter">
+          <IconPlus size={18} />
+        </ActionIcon>
+      </Group>
+      <Space h="lg" />
       {
+        !data && !value &&
+        <Center>
+          <Text fz="lg" c="dimmed">
+            Use filters and above to search elements in current index
+          </Text>
+        </Center>
+      }
+      {
+        
         isFetching
           ? <Center>
               <Loader size={50} />
             </Center>
           : <SimpleGrid
-              cols={4}
               spacing="lg"
-              breakpoints={[
-                { maxWidth: 980, cols: 3, spacing: 'md' },
-                { maxWidth: 755, cols: 2, spacing: 'sm' },
-                { maxWidth: 600, cols: 1, spacing: 'sm' },
-              ]}
+              type="container"
+              cols={{ base: 1, '500px': 2, '700px': 3, '980px': 4 }}
             >
             {
               data?.data?.hits.map((hit: any) => <Items key={hit._id} {...hit} />)
