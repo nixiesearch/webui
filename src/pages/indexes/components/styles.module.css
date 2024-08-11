@@ -1,0 +1,18 @@
+.filters {
+  border: transparent;
+  background-color: transparent;
+  max-height: calc(100vh - 50px);
+  border-radius: var(--mantine-radius-md);
+  width: 100vw;
+  max-width: calc(100vw - 20px);
+  box-sizing: border-box;
+  @media (min-width: $mantine-breakpoint-sm) {
+    display: contents;
+  }
+}
+
+.facetContainer {
+  @media (min-width: $mantine-breakpoint-sm) {
+    max-width: 200px;
+  }
+}

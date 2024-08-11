@@ -27,7 +27,7 @@ root.render(
         <ModalsProvider>
           <Refine
             notificationProvider={useNotificationProvider}
-            dataProvider={providers}
+            dataProvider={providers as any}
             routerProvider={routerBindings}
             resources={resources}
             options={options}

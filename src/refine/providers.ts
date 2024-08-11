@@ -2,7 +2,7 @@ import dataProvider from "@refinedev/simple-rest"
 import { resources } from "../resources"
 
 const defaultDataProvider = {
-  ...dataProvider("https://demo.nixiesearch.ai"),
+  ...dataProvider((window as any).nixie_host || "https://demo.nixiesearch.ai"),
   getOne: async ({ resource, id, meta }: { resource: string, id: string, meta: any }) => {
     const apiURL = defaultDataProvider.getApiUrl()
     const path = resources!.find((r) => r.name === resource)?.show as string
@@ -13,11 +13,13 @@ const defaultDataProvider = {
       query: meta.params
     })
   
-    return response.data
+    return response
   },
   getMany: async ({ resource, ids, meta }: { resource: string, ids: string[], meta: any }) => {
-    const data = await Promise.all(ids.map((id) => defaultDataProvider.getOne({ resource, id, meta })))
-    return { data }
+    const res = await Promise.all(ids.map((id) => defaultDataProvider.getOne({ resource, id, meta })))
+    return {
+      data: res.map((r) => r.data),
+    }
   }
 }
 
