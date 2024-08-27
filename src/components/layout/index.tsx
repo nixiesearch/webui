@@ -18,7 +18,7 @@ export const Layout = () => {
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
           <Group px='md'>
             <img src={logo} width={30} />
-            <Title size={20}>Nixie Search</Title>
+            <Title size={20}>Nixiesearch</Title>
           </Group>
         </Group>
       </AppShell.Header>
