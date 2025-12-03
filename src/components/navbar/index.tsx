@@ -18,38 +18,25 @@ const Link = ({ icon, label, initiallyOpened, links, link }: LinkProps) => {
   const hasLinks = Array.isArray(links);
   const [opened, setOpened] = useState(initiallyOpened || false);
   const items = (hasLinks ? links : []).map((link) => (
-    <RouterLink
+    <NavLink
       key={link.label}
+      component={RouterLink}
       to={link.link}
-      className={classes.link}
-    >
-      {({ isActive }) => (
-        <NavLink
-          active={isActive}
-          label={link.label}
-        />
-      )}
-    </RouterLink>
+      label={link.label}
+    />
   ));
 
   if (!hasLinks) {
     return (
-      <RouterLink
+      <NavLink
+        component={RouterLink}
         to={link}
-        className={classes.link}
-        onClick={() => hasLinks && setOpened(!opened)}
-      >
-        {({ isActive }) => (
-          <NavLink
-            label={label}
-            active={isActive}
-            opened={opened}
-            leftSection={
-              icon && React.cloneElement(icon, { style: { width: rem(18), height: rem(18) } })
-            }
-          />
-        )}
-      </RouterLink>
+        label={label}
+        opened={opened}
+        leftSection={
+          icon && React.cloneElement(icon, { style: { width: rem(18), height: rem(18) } })
+        }
+      />
     );
   }
 
