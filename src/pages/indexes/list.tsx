@@ -84,7 +84,7 @@ export const IndexesList = () => {
                 >
                   <Table.Th>{schema[key].name}</Table.Th>
                   <Table.Th>{countsMap[i]}</Table.Th>
-                  <Table.Th>{schema[key].config.flush.interval}</Table.Th>
+                  <Table.Th>{schema[key].config.indexer?.flush?.interval}</Table.Th>
                   <Table.Th>{schema[key].name}</Table.Th>
                   <Table.Th align="right">
                     <ActionIcon aria-label="View index">
